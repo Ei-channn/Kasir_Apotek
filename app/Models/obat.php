@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class obat extends Model
 {
+
     protected $fillable = [
         'nama_obat',
         'kode_obat',
