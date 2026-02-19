@@ -21,6 +21,6 @@ class transaksi extends Model
     
     public function detailTransaksis()
     {
-        return $this->hasMany(DetailTransaksi::class);
+        return $this->hasMany(detail_transaksi::class);
     }
 }

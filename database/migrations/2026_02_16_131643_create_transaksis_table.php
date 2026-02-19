@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('no_transaksi')->unique();
+            $table->string('no_transaksi')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->integer('bayar');
             $table->integer('total_harga');
