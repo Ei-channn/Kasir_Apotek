@@ -31,6 +31,10 @@ class User extends Authenticatable
         return $this->hasMany(transaksi::class);
     }
 
+    public function logs() {
+        return $this->hasMany(log::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

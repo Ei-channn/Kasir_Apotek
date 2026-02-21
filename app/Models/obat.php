@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Traits\AuditLog;
 
 class obat extends Model
 {
+    use AuditLog;
 
     protected $fillable = [
         'nama_obat',

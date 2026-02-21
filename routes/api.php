@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\kategoriController;
 use App\Http\Controllers\Api\obatController;
 use App\Http\Controllers\Api\transaksiController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\logController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -18,3 +19,4 @@ Route::post('login', [AuthController::class, 'login']);
 Route::apiResource('kategori', kategoriController::class)->middleware('auth:sanctum');
 Route::apiResource('obat', obatController::class)->middleware('auth:sanctum');
 Route::apiResource('transaksi', transaksiController::class)->middleware('auth:sanctum');
+Route::get('logs', [logController::class, 'index'])->middleware('auth:sanctum');
