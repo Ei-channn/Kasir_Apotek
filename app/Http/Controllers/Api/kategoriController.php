@@ -12,6 +12,10 @@ class kategoriController extends Controller
 {
     public function index() {
         $kategoriobat = kategori_obat::paginate(10);
+
+        if ($kategoriobat->isEmpty()) {
+            return new ApiResource(null, false, 'Tidak ada data kategori obat');
+        }
         
         return new ApiResource($kategoriobat, true, 'Kategori Obat Berhasil diambil');
     }

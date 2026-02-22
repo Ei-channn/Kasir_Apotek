@@ -18,4 +18,9 @@ class detail_transaksi extends Model
     {
         return $this->belongsTo(transaksi::class);
     }
+
+    public function obat()
+    {
+        return $this->belongsTo(obat::class);
+    }
 }

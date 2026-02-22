@@ -14,8 +14,13 @@ class TransaksiController extends Controller
 {
     public function index()
     {
-        $transaksi = Transaksi::with('detailTransaksis')->paginate(10);
-        return ApiResource::collection($transaksi);
+        $transaksi = Transaksi::with('detailTransaksis.obat')->paginate(10);
+
+        if ($transaksi->isEmpty()) {
+            return new ApiResource(null, false, 'Tidak ada data transaksi');
+        }
+
+        return ApiResource($transaksi, true, 'Transaksi Berhasil diambil');
     }
 
     public function store(Request $request)
@@ -56,9 +61,8 @@ class TransaksiController extends Controller
                 $kembalian = $request->bayar - $total;
 
                 if ($kembalian < 0) {
-                    return response()->json([
-                        'message' => 'Uang tidak cukup'
-                    ], 400);
+                    DB::rollBack();
+                    return new ApiResource(null, false, 'Uang bayar tidak cukup');
                 }
 
                 detail_transaksi::create([
@@ -78,20 +82,27 @@ class TransaksiController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'message' => 'Transaksi berhasil',
-                'data' => $transaksi->load('detailTransaksis')
-            ]);
+            return new ApiResource($transaksi->load('detailTransaksis'), true, 'Transaksi berhasil');
 
         } catch (\Exception $e) {
 
             DB::rollBack();
 
-            return response()->json([
-                'message' => 'Gagal menyimpan transaksi',
+            return new ApiResource(null, false, 'Gagal menyimpan transaksi', [
                 'error' => $e->getMessage()
-            ], 500);
+            ]);
         }
+    }
+
+    public function show($id)
+    {
+        $transaksi = Transaksi::with('detailTransaksis.obat')->find($id);
+
+        if (!$transaksi) {
+            return new ApiResource(null, false, 'Transaksi tidak ditemukan');
+        }
+
+        return new ApiResource($transaksi);
     }
 
     public function destroy($id)
@@ -99,14 +110,10 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::find($id);
 
         if (!$transaksi) {
-            return response()->json([
-                'message' => 'Transaksi tidak ditemukan'
-            ], 404);    
+            return new ApiResource(null, false, 'Transaksi tidak ditemukan');
         }
 
         $transaksi->delete();
-        return response()->json([
-            'message' => 'Transaksi berhasil dihapus'
-        ]);
+        return new ApiResource(null, true, 'Transaksi berhasil dihapus');
     }
 }

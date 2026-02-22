@@ -13,6 +13,10 @@ class obatController extends Controller
 {
     public function index() {
         $obat = obat::with('kategoriObat')->paginate(10);
+
+        if ($obat->isEmpty()) {
+            return new ApiResource(null, false, 'Tidak ada data obat');
+        }
         
         return new ApiResource($obat, true, 'Obat Berhasil diambil');
     }

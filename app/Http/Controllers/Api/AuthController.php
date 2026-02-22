@@ -19,7 +19,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return new ApiResource(null, false, 'Validasi gagal', $validator->errors());
         }
 
         $user = User::create([
@@ -28,11 +28,15 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'User registered successfully'], 201);
+        return new ApiResource($user, true, 'User registered successfully');
     }
 
     public function login(Request $request) {
         $credentials = $request->only('email', 'password');
+
+        if ($validator->fails()) {
+            return new ApiResource(null, false, 'Validasi gagal', $validator->errors());
+        }
 
         if (auth()->attempt($credentials)) {
             $user = auth()->user();
@@ -45,6 +49,6 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Unauthorized'], 401);
+        return new ApiResource(null, false, 'Invalid email or password');
     }
 }
