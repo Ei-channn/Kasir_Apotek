@@ -20,7 +20,7 @@ class TransaksiController extends Controller
             return new ApiResource(null, false, 'Tidak ada data transaksi');
         }
 
-        return ApiResource($transaksi, true, 'Transaksi Berhasil diambil');
+        return new ApiResource($transaksi, true, 'Transaksi Berhasil diambil');
     }
 
     public function store(Request $request)
@@ -102,7 +102,7 @@ class TransaksiController extends Controller
             return new ApiResource(null, false, 'Transaksi tidak ditemukan');
         }
 
-        return new ApiResource($transaksi);
+        return new ApiResource($transaksi, true, 'Transaksi Berhasil diambil');
     }
 
     public function destroy($id)

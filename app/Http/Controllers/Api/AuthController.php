@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ApiResource;
 
 class AuthController extends Controller
 {
@@ -33,10 +34,6 @@ class AuthController extends Controller
 
     public function login(Request $request) {
         $credentials = $request->only('email', 'password');
-
-        if ($validator->fails()) {
-            return new ApiResource(null, false, 'Validasi gagal', $validator->errors());
-        }
 
         if (auth()->attempt($credentials)) {
             $user = auth()->user();

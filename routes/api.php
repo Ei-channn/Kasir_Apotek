@@ -17,6 +17,6 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::apiResource('kategori', kategoriController::class)->middleware('auth:sanctum');
-Route::apiResource('obat', obatController::class);
-Route::apiResource('transaksi', transaksiController::class);
-Route::get('logs', [logController::class, 'index']);
+Route::apiResource('obat', obatController::class)->middleware('auth:sanctum');
+Route::apiResource('transaksi', transaksiController::class)->middleware('auth:sanctum');
+Route::get('logs', [logController::class, 'index'])->middleware('auth:sanctum');

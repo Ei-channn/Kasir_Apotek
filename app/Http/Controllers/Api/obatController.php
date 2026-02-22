@@ -41,7 +41,7 @@ class obatController extends Controller
     }
 
     public function show($id) {
-        $obat = obat::with('kategori')->find($id);
+        $obat = obat::with('kategoriObat')->find($id);
 
         if (!$obat) {
             return new ApiResource(null, false, 'Obat tidak ditemukan');
