@@ -15,10 +15,10 @@ class obatController extends Controller
         $obat = obat::with('kategoriObat')->paginate(10);
 
         if ($obat->isEmpty()) {
-            return new ApiResource(null, false, 'Tidak ada data obat');
+            return new ApiResource(null, false, 'Tidak ada data obat', 404);
         }
         
-        return new ApiResource($obat, true, 'Obat Berhasil diambil');
+        return new ApiResource($obat, true, 'Obat Berhasil diambil', 200);
     }
 
     public function store(Request $request) {
@@ -32,29 +32,29 @@ class obatController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return new ApiResource(null, false, 'Validasi gagal', $validator->errors());
+            return new ApiResource($validator->errors(), false, 'Validasi gagal', 422 );
         }
 
         $obat = obat::create($request->all());
         
-        return new ApiResource($obat, true, 'Obat Berhasil dibuat');
+        return new ApiResource($obat, true, 'Obat Berhasil dibuat', 201);
     }
 
     public function show($id) {
         $obat = obat::with('kategoriObat')->find($id);
 
         if (!$obat) {
-            return new ApiResource(null, false, 'Obat tidak ditemukan');
+            return new ApiResource(null, false, 'Obat tidak ditemukan', 404);
         }
 
-        return new ApiResource($obat, true, 'Obat Berhasil diambil');
+        return new ApiResource($obat, true, 'Obat Berhasil diambil', 200);
     }
 
     public function update(Request $request, $id) {
         $obat = obat::find($id);
 
         if (!$obat) {
-            return new ApiResource(null, false, 'Obat tidak ditemukan');
+            return new ApiResource(null, false, 'Obat tidak ditemukan', 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -67,7 +67,7 @@ class obatController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return new ApiResource(null, false, 'Validasi gagal', $validator->errors());
+            return new ApiResource($validator->errors(), false, 'Validasi gagal', 422 );
         }
 
         $obat->update([
@@ -79,18 +79,18 @@ class obatController extends Controller
             'tanggal_kadaluarsa' => $request->tanggal_kadaluarsa ?? $obat->tanggal_kadaluarsa,
         ]);
         
-        return new ApiResource($obat, true, 'Obat Berhasil diupdate');
+        return new ApiResource($obat, true, 'Obat Berhasil diupdate', 200);
     }
 
     public function destroy($id) {
         $obat = obat::find($id);
 
         if (!$obat) {
-            return new ApiResource(null, false, 'Obat tidak ditemukan');
+            return new ApiResource(null, false, 'Obat tidak ditemukan', 404);
         }
 
         $obat->delete();
 
-        return new ApiResource(null, true, 'Obat Berhasil dihapus');
+        return new ApiResource(null, true, 'Obat Berhasil dihapus', 200);
     }
 } 

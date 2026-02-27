@@ -17,10 +17,10 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::with('detailTransaksis.obat')->paginate(10);
 
         if ($transaksi->isEmpty()) {
-            return new ApiResource(null, false, 'Tidak ada data transaksi');
+            return new ApiResource(null, false, 'Tidak ada data transaksi', 404);
         }
 
-        return new ApiResource($transaksi, true, 'Transaksi Berhasil diambil');
+        return new ApiResource($transaksi, true, 'Transaksi Berhasil diambil', 200);
     }
 
     public function store(Request $request)
@@ -33,7 +33,7 @@ class TransaksiController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return new ApiResource(null, false, 'Validasi gagal', $validator->errors());
+            return new ApiResource($validator->errors(), false, 'Validasi gagal', 422 );
         }
 
         DB::beginTransaction();
@@ -62,7 +62,7 @@ class TransaksiController extends Controller
 
                 if ($kembalian < 0) {
                     DB::rollBack();
-                    return new ApiResource(null, false, 'Uang bayar tidak cukup');
+                    return new ApiResource(null, false, 'Uang bayar tidak cukup', 422);
                 }
 
                 detail_transaksi::create([
@@ -82,7 +82,7 @@ class TransaksiController extends Controller
 
             DB::commit();
 
-            return new ApiResource($transaksi->load('detailTransaksis'), true, 'Transaksi berhasil');
+            return new ApiResource($transaksi->load('detailTransaksis'), true, 'Transaksi berhasil', 201);
 
         } catch (\Exception $e) {
 
@@ -90,7 +90,7 @@ class TransaksiController extends Controller
 
             return new ApiResource(null, false, 'Gagal menyimpan transaksi', [
                 'error' => $e->getMessage()
-            ]);
+            ], 422);
         }
     }
 
@@ -99,10 +99,10 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::with('detailTransaksis.obat')->find($id);
 
         if (!$transaksi) {
-            return new ApiResource(null, false, 'Transaksi tidak ditemukan');
+            return new ApiResource(null, false, 'Transaksi tidak ditemukan', 404);
         }
 
-        return new ApiResource($transaksi, true, 'Transaksi Berhasil diambil');
+        return new ApiResource($transaksi, true, 'Transaksi Berhasil diambil', 200);
     }
 
     public function destroy($id)
@@ -110,10 +110,10 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::find($id);
 
         if (!$transaksi) {
-            return new ApiResource(null, false, 'Transaksi tidak ditemukan');
+            return new ApiResource(null, false, 'Transaksi tidak ditemukan', 404);
         }
 
         $transaksi->delete();
-        return new ApiResource(null, true, 'Transaksi berhasil dihapus');
+        return new ApiResource(null, true, 'Transaksi berhasil dihapus', 200);
     }
 }

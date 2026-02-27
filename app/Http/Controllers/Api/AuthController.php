@@ -20,7 +20,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return new ApiResource(null, false, 'Validasi gagal', $validator->errors());
+            return new ApiResource($validator->errors(), false, 'Validasi gagal', 422 );
         }
 
         $user = User::create([
@@ -29,7 +29,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return new ApiResource($user, true, 'User registered successfully');
+        return new ApiResource($user, true, 'User registered successfully', 201);
     }
 
     public function login(Request $request) {
@@ -43,9 +43,9 @@ class AuthController extends Controller
                 'message' => 'Login successful',
                 'access_token' => $token,
                 'token_type' => 'Bearer',
-            ]);
+            ], 200);
         }
 
-        return new ApiResource(null, false, 'Invalid email or password');
+        return new ApiResource(null, false, 'Invalid email or password', 401);
     }
 }

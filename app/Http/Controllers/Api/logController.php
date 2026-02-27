@@ -15,9 +15,9 @@ class logController extends Controller
         $logs = Log::with('user')->latest()->paginate(10);
 
         if ($logs->isEmpty()) {
-            return new ApiResource(null, false, 'Tidak ada data log');
+            return new ApiResource(null, false, 'Tidak ada data log', 404);
         }
 
-        return new ApiResource($logs, true, 'Logs berhasil diambil');
+        return new ApiResource($logs, true, 'Logs berhasil diambil', 200);
     }
 }

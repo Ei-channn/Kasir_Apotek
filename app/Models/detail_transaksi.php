@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\AuditLog;
 
 class detail_transaksi extends Model
 {
+    use AuditLog;
+
     protected $fillable = [
         'transaksi_id',
         'obat_id',
