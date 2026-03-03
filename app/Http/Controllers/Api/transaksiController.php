@@ -14,7 +14,7 @@ class TransaksiController extends Controller
 {
     public function index()
     {
-        $transaksi = Transaksi::with('detailTransaksis.obat')->paginate(10);
+        $transaksi = Transaksi::with('user','detailTransaksis.obat')->paginate(10);
 
         if ($transaksi->isEmpty()) {
             return new ApiResource(null, false, 'Tidak ada data transaksi', 404);

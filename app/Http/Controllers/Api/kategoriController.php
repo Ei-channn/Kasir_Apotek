@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 class kategoriController extends Controller
 {
     public function index() {
-        $kategoriobat = kategori_obat::paginate(10);
+        $kategoriobat = kategori_obat::withCount('obats')->paginate(10);
 
         if ($kategoriobat->isEmpty()) {
             return new ApiResource(null, false, 'Tidak ada data kategori obat', 404);
