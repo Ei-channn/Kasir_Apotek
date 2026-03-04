@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\LaporanController;
     
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::apiResource('kategori', kategoriController::class)->middleware('auth:sanctum');
 Route::apiResource('obat', obatController::class)->middleware('auth:sanctum');

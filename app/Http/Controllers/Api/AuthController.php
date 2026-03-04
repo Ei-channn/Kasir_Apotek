@@ -48,4 +48,12 @@ class AuthController extends Controller
 
         return new ApiResource(null, false, 'Invalid email or password', 401);
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return new ApiResource(null, true, 'Logout berhasil');
+    }
+
 }
