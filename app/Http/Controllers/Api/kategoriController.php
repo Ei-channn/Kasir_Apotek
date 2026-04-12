@@ -77,4 +77,10 @@ class kategoriController extends Controller
 
         return new ApiResource(null, true, 'Kategori Obat Berhasil dihapus', 200);
     }
+
+    public function getKategori() {
+        $kategori = kategori_obat::get()->count();
+
+        return new ApiResource($kategori, true, 'Data Berhasil Diambil');
+    }
 }

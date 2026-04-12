@@ -11,7 +11,7 @@ use App\Models\kategori_obat;
 
 class obatController extends Controller
 {
-    public function index() {
+    public function index() {   
         $obat = obat::with('kategoriObat')->paginate(10);
 
         if ($obat->isEmpty()) {
@@ -92,5 +92,21 @@ class obatController extends Controller
         $obat->delete();
 
         return new ApiResource(null, true, 'Obat Berhasil dihapus', 200);
+    }
+
+    public function getCountObat() {
+        $obat = obat::get()->count();
+
+        return new ApiResource($obat, true, 'Data Berhasil Diambil', 200);
+    }
+
+    public function getDateObat() {
+        $obat = obat::whereDate('tanggal_kadaluarsa', '<=', now()->addDays(30))->get();
+
+        if ($obat->isEmpty()) {
+            return new ApiResource(null, false, 'Tidak ada data obat yang akan kadaluarsa dalam 30 hari', 404);
+        }
+
+        return new ApiResource($obat, true, 'Data Berhasil Diambil', 200);
     }
 } 

@@ -56,6 +56,11 @@ class TransaksiController extends Controller
 
                 $harga = $obat->harga;
                 $subtotal = $item['jumlah'] * $harga;
+                $minStok = $obat->stok - $item['jumlah'];
+
+                $obat->update([
+                    'stok' => $minStok,
+                ]);
 
                 $total += $subtotal;
                 $kembalian = $request->bayar - $total;
